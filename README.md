@@ -1,0 +1,2 @@
+# pt_br_tweets_sentiment_analysis
+Sentiment Analysis experiments using brazilian portuguese tweets
