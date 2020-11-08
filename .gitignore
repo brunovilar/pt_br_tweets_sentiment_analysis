@@ -127,3 +127,7 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Specific Data that are too large or should not be public
+data/corpus
+data/resources/pos-pt
