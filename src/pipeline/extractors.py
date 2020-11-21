@@ -3,7 +3,7 @@ import funcy as fp
 from collections import defaultdict
 from collections.abc import Iterable
 from .adaptors import get_adaptor_fn
-from .processors import process_word_lemma
+from .token_processors import process_word_lemma
 
 
 def extract_tokens_and_features(text, nlp_pipeline, word_processors=None, sentence_processors=None):

@@ -3,16 +3,7 @@ import regex as re
 from .. import settings
 from .resources import (POLARITIES, POS_TAGS, SENTILEX_POLARITIES,
                         load_sentilex, load_emoji_polarity_index)
-from .regular_expressions import (IDENTIFY_HTML_TAGS,
-                                  IDENTIFY_URLS,
-                                  IDENTIFY_URLS,
-                                  IDENTIFY_REPEATED_SPACES,
-                                  IDENTIFY_HASH_TAGS,
-                                  IDENTIFY_MENTIONS,
-                                  IDENTIFY_NUMBERS,
-                                  IDENTIFY_REPETITIONS,
-                                  MODIFY_REPETITIONS,
-                                  EXTRACT_POLARITY)
+from .regular_expressions import EXTRACT_POLARITY
 
 
 def process_word_text(word):

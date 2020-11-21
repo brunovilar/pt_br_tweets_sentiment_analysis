@@ -5,7 +5,7 @@ from .regular_expressions import (IDENTIFY_HTML_TAGS, IDENTIFY_URLS, IDENTIFY_RE
 
 
 def clean_text(text, unify_html_tags=True, unify_urls=True, trim_repeating_spaces=True, unify_hashtags=True,
-               unify_mentions=True, unify_numbers=True, trim_repeating_letters=True):
+               unify_mentions=True, unify_numbers=True, trim_repeating_letters=True, lower_case=False):
     text = re.sub(IDENTIFY_HTML_TAGS, ' ', text) if unify_html_tags else text
     text = re.sub(IDENTIFY_URLS, 'URL', text) if unify_urls else text
     text = re.sub(IDENTIFY_REPEATED_SPACES, ' ', text) if trim_repeating_spaces else text
@@ -13,5 +13,6 @@ def clean_text(text, unify_html_tags=True, unify_urls=True, trim_repeating_space
     text = re.sub(IDENTIFY_MENTIONS, ' USERNAME ', text) if unify_mentions else text
     text = re.sub(IDENTIFY_NUMBERS, ' NUMBER ', text) if unify_numbers else text
     text = re.sub(IDENTIFY_REPETITIONS, MODIFY_REPETITIONS, text) if trim_repeating_letters else text
+    text = text.lower() if lower_case else text
 
     return text

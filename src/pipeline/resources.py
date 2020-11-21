@@ -7,6 +7,7 @@ from .. import settings
 POLARITIES = ['Neg', None, 'Pos']
 SENTILEX_POLARITIES = ['-1', '0', '1']
 EMOTICON_POLARITIES = ['-1', '1']
+EMOJI_POLARITIES = ['0', '1']
 INTERNAL_TOKENS = {'URL', 'HASH_TAG', 'USERNAME', 'NUMBER'}
 SELECTED_POS_TAGS = ['ADJ', 'ADV', 'NOUN', 'VERB']
 POS_TAGS = ['ADJ', 'ADP', 'ADV', 'AUX', 'CCONJ', 'DET', 'INTJ', 'NOUN', 'NUM', 'PART', 'PRON', 'PROPN', 'PUNCT',
