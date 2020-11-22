@@ -3,7 +3,7 @@ import funcy as fp
 from collections import defaultdict
 from collections.abc import Iterable
 from .adaptors import get_adaptor_fn
-from .token_processors import process_word_lemma
+from .token_processors import process_token_lemma
 
 
 def extract_tokens_and_features(text, nlp_pipeline, word_processors=None, sentence_processors=None):
@@ -25,7 +25,7 @@ def extract_tokens_and_features(text, nlp_pipeline, word_processors=None, senten
     document = adaptor_fn(nlp_pipeline(text))
 
     for token in document:
-        tokens.append(process_word_lemma(token))
+        tokens.append(process_token_lemma(token))
 
         for processor_fn in word_processors:
             word_features[processor_fn.__name__].append(processor_fn(token))
@@ -56,6 +56,6 @@ def extract_tokens(text, nlp_pipeline):
 
     tokens = []
     for token in document:
-        tokens.append(process_word_lemma(token))
+        tokens.append(process_token_lemma(token))
 
     return tokens

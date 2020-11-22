@@ -31,7 +31,7 @@ def process_polarity_features(tokens_features, use_relative_values=False):
 
 def process_pos_tag_features(tokens_features, use_relative_values=False):
 
-    return process_extracted_features(tokens_features, 'process_word_pos_tag', len(POS_TAGS), use_relative_values)
+    return process_extracted_features(tokens_features, 'process_token_pos_tag', len(POS_TAGS), use_relative_values)
 
 
 def process_sentilex_polarity_features(tokens_features, use_relative_values=False):
