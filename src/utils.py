@@ -28,3 +28,7 @@ def compute_classification_metrics(y_train, y_preds):
         'f1': metrics.f1_score(y_train, y_preds),
         'filtering': sum(y_preds) / len(y_preds)
     }
+
+
+def format_nested_parameters(param_dict, param_name):
+    return {f'{param_name}__{key}':value for key, value in param_dict.items()}
