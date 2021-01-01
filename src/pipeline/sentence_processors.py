@@ -26,7 +26,7 @@ def process_negative_words_features(tokens_features, use_relative_values=False):
 
 def process_polarity_features(tokens_features, use_relative_values=False):
 
-    return process_extracted_features(tokens_features, 'process_word_polarity', len(POLARITIES), use_relative_values)
+    return process_extracted_features(tokens_features, 'process_token_polarity', len(POLARITIES), use_relative_values)
 
 
 def process_pos_tag_features(tokens_features, use_relative_values=False):

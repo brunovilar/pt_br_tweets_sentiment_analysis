@@ -1,6 +1,7 @@
 import numpy as np
 from sklearn import metrics
 from scipy import sparse
+from collections.abc import Iterable
 
 
 def y_to_sparse(y):
@@ -30,5 +31,13 @@ def compute_classification_metrics(y_train, y_preds):
     }
 
 
+def format_compound_value(value):
+    if not isinstance(value, str) and isinstance(value, Iterable):
+        ','.join([str(item) for item in value])
+    else:
+        return value
+
+
 def format_nested_parameters(param_dict, param_name):
-    return {f'{param_name}__{key}':value for key, value in param_dict.items()}
+    return {f'{param_name}__{key}': format_compound_value(value)
+            for key, value in param_dict.items()}
