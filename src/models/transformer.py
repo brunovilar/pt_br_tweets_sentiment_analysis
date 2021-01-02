@@ -18,7 +18,7 @@ class TransformerClassifier(nn.Module):
     """
 
     def __init__(self, pretrained_model_class: PreTrainedModel, pretrained_model_name: str, extra_layers: List[int],
-                 freeze: bool = False):
+                 dropout_layers: List[float] = None, freeze: bool = False):
         """
         @param  pretrained_model_class: an object of a pre trained model class (e.g., BertModel)
         @param  pretrained_model_name: a pretrained model path (e.g., 'neuralmind/bert-base-portuguese-cased')
@@ -28,11 +28,17 @@ class TransformerClassifier(nn.Module):
         # Instantiate  model
         self.model = pretrained_model_class.from_pretrained(pretrained_model_name)
 
+        dropout_layers = dropout_layers or [0. for _ in extra_layers]
+        assert len(extra_layers) == len(dropout_layers), 'Extra Layers and Dropout Layers should have the same length'
+
         # Adds the size of the output layer
         all_layers = [768] + extra_layers + [3]
+        dropout_layers = [0.] + dropout_layers + [0.]
         # Instantiate layers based on the sizes received
-        layers_instances = fp.lflatten([[nn.Linear(prev, layer), nn.ReLU()]
-                                        for layer, prev in fp.with_prev(all_layers) if prev])
+        layers_instances = fp.lflatten([[nn.Linear(prev, layer), nn.ReLU()] +
+                                        ([nn.Dropout(dropout_layers[i])] if dropout_layers[i] > 0 else [])
+                                        for i, (layer, prev) in enumerate(fp.with_prev(all_layers)) if prev])
+        layers_instances = layers_instances[:-1]  # Remove the last ReLU added.
         layers_instances = layers_instances[:-1]  # Remove the last ReLU added.
         self.classifier = nn.Sequential(*layers_instances)
 
@@ -90,9 +96,10 @@ def preprocess(data: np.array, tokenizer: PreTrainedTokenizer, max_len: int,
 
 
 def initialize_model(pretrained_model_class: PreTrainedModel, pretrained_model_name: str, extra_layers: List[int],
-                     training_len: int, epochs: int = 2, custom_scheduler: bool = True, freeze: bool = False):
+                     dropout_layers: List[float], training_len: int, epochs: int = 2, custom_scheduler: bool = True,
+                     freeze: bool = False):
     transformer_classifier = TransformerClassifier(pretrained_model_class, pretrained_model_name, extra_layers,
-                                                   freeze=freeze)
+                                                   dropout_layers, freeze=freeze)
     transformer_classifier.to(get_device())
 
     optimizer = AdamW(transformer_classifier.parameters(), lr=5e-5, eps=1e-8)
