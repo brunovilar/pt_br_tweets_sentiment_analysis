@@ -32,7 +32,7 @@ class TransformerClassifier(nn.Module):
         assert len(extra_layers) == len(dropout_layers), 'Extra Layers and Dropout Layers should have the same length'
 
         # Adds the size of the output layer
-        all_layers = [768] + extra_layers + [3]
+        all_layers = [self.model.config.hidden_size] + extra_layers + [3]
         dropout_layers = [0.] + dropout_layers + [0.]
         # Instantiate layers based on the sizes received
         layers_instances = fp.lflatten([[nn.Linear(prev, layer), nn.ReLU()] +
