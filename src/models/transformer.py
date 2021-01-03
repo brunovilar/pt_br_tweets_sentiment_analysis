@@ -39,7 +39,6 @@ class TransformerClassifier(nn.Module):
                                         ([nn.Dropout(dropout_layers[i])] if dropout_layers[i] > 0 else [])
                                         for i, (layer, prev) in enumerate(fp.with_prev(all_layers)) if prev])
         layers_instances = layers_instances[:-1]  # Remove the last ReLU added.
-        layers_instances = layers_instances[:-1]  # Remove the last ReLU added.
         self.classifier = nn.Sequential(*layers_instances)
 
         if freeze:
