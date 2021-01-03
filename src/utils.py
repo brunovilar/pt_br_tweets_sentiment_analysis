@@ -33,7 +33,7 @@ def compute_classification_metrics(y_train, y_preds):
 
 def format_compound_value(value):
     if not isinstance(value, str) and isinstance(value, Iterable):
-        return ','.join([str(item) for item in value])
+        return ','.join([str(item) for item in value])[:250]
     else:
         return value
 
