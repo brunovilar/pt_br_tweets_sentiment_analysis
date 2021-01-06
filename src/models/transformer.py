@@ -67,14 +67,15 @@ def get_device():
 
 def preprocess(data: np.array, tokenizer: PreTrainedTokenizer, max_len: int,
                unify_html_tags: bool, unify_urls: bool, trim_repeating_spaces: bool,
-               unify_hashtags: bool, unify_mentions: bool, unify_numbers: bool, trim_repeating_letters: bool):
+               unify_hashtags: bool, unify_mentions: bool, unify_numbers: bool,
+               trim_repeating_letters: bool, lower_case: bool):
     input_ids = []
     attention_masks = []
 
     partial_clean_text = partial(clean_text, unify_html_tags=unify_html_tags, unify_urls=unify_urls,
                                  trim_repeating_spaces=trim_repeating_spaces, unify_hashtags=unify_hashtags,
                                  unify_mentions=unify_mentions, unify_numbers=unify_numbers,
-                                 trim_repeating_letters=trim_repeating_letters)
+                                 trim_repeating_letters=trim_repeating_letters, lower_case=lower_case)
 
     for sentence in data:
         encoded_sentence = tokenizer.encode_plus(
@@ -96,12 +97,12 @@ def preprocess(data: np.array, tokenizer: PreTrainedTokenizer, max_len: int,
 
 def initialize_model(pretrained_model_class: PreTrainedModel, pretrained_model_name: str, extra_layers: List[int],
                      dropout_layers: List[float], training_len: int, epochs: int = 2, custom_scheduler: bool = True,
-                     freeze: bool = False):
+                     freeze: bool = False, learning_rate=2e-5):
     transformer_classifier = TransformerClassifier(pretrained_model_class, pretrained_model_name, extra_layers,
                                                    dropout_layers, freeze=freeze)
     transformer_classifier.to(get_device())
 
-    optimizer = AdamW(transformer_classifier.parameters(), lr=5e-5, eps=1e-8)
+    optimizer = AdamW(transformer_classifier.parameters(), lr=learning_rate, eps=1e-8)
 
     # Total number of training steps
     total_steps = training_len * epochs
