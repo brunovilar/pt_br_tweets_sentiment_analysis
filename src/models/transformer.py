@@ -82,8 +82,9 @@ def preprocess(data: np.array, tokenizer: PreTrainedTokenizer, max_len: int,
             text=partial_clean_text(sentence),
             add_special_tokens=True,
             max_length=max_len,
-            pad_to_max_length=True,
-            return_attention_mask=True
+            padding='max_length',
+            return_attention_mask=True,
+            truncation=True
         )
 
         input_ids.append(encoded_sentence.get('input_ids'))
