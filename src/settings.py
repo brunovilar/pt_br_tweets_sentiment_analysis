@@ -4,6 +4,7 @@ CORPUS_PATH = os.path.join(os.pardir, 'data', 'corpus', 'corpusTT.json')
 SENTILEX_PATH = os.path.join(os.pardir, 'data', 'resources', 'sentilex-reduzido.txt')
 EMOJI_SENTIMENT_PATH = os.path.join(os.pardir, 'data', 'resources', 'Emoji_Sentiment_Data_v1.0.csv')
 NLPNET_POS_TAGGER_PATH = os.path.join(os.pardir, 'data', 'resources', 'pos-pt')
+LOGS_ARTIFACTS_PATH = os.path.join(os.pardir, 'data', 'log')
 
 NEGATIONS_WORDS = {'jamais','nada', 'nem','nenhum', 'nenhures', 'ninguém',
                    'ninguem', 'nonada', 'nulidade', 'nunca', 'não', 'nao',

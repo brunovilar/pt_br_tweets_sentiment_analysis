@@ -32,12 +32,29 @@ def compute_classification_metrics(y_train, y_preds):
 
 
 def format_compound_value(value):
-    if not isinstance(value, str) and isinstance(value, Iterable):
-        return ','.join([str(item) for item in value])[:250]
+
+    basic_types = [int, float, bool]
+
+    if any([isinstance(value, item_type) for item_type in basic_types]):
+        return value, False
     else:
-        return value
+        if not isinstance(value, str) and isinstance(value, Iterable):
+            formatted_value = ','.join([str(item) for item in value])
+        else:
+            formatted_value = str(value)
+
+        return formatted_value, len(formatted_value) > 250
 
 
 def format_nested_parameters(param_dict, param_name):
-    return {f'{param_name}__{key}': format_compound_value(value)
-            for key, value in param_dict.items()}
+
+    preprocessed_params = [(key, *format_compound_value(value)) for key, value in param_dict.items()]
+
+    simple_params = {f'{param_name}__{key}': value if not is_longer else f'Snippet: {value[:235]} (...)'
+                     for key, value, is_longer in preprocessed_params}
+
+    complex_params = {f'{param_name}__{key}': value
+                      for key, value, is_longer in preprocessed_params
+                      if is_longer}
+
+    return simple_params, complex_params
