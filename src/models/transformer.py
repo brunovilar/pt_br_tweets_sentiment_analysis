@@ -1,3 +1,4 @@
+import mlflow
 import random
 import funcy as fp
 from typing import List
@@ -5,6 +6,7 @@ from typing import List
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+from torch.utils.data import TensorDataset, DataLoader, SequentialSampler
 import numpy as np
 from functools import partial
 from transformers import PreTrainedTokenizer, PreTrainedModel, AdamW, get_linear_schedule_with_warmup
@@ -166,3 +168,29 @@ def predict(model, dataloader):
     probs = F.softmax(all_logits, dim=1).cpu().numpy()
 
     return probs
+
+
+def compute_embeddings(model_class, model_name, batch_size, data, preprocessing_params, selected_layers=-4):
+
+    model = model_class.from_pretrained(model_name, output_hidden_states=True)
+    model = model.to(get_device())
+
+    preprocessed_data, _ = preprocess(data, **preprocessing_params)
+    preprocessed_data = preprocessed_data.to(get_device())
+
+    tensor_data = TensorDataset(preprocessed_data)
+    sampler = SequentialSampler(tensor_data)
+    dataloader = DataLoader(tensor_data, sampler=sampler, batch_size=batch_size)
+
+    results = []
+    model.eval()
+    for batch in dataloader:
+        batch = batch[0].to(get_device())
+        with torch.no_grad():
+            hidden_states = model(input_ids=batch)[2][selected_layers:]
+
+        hidden_states = torch.cat(hidden_states, dim=-1)
+        sentence_embeddings = torch.mean(hidden_states, dim=1)
+        results.append(sentence_embeddings.cpu().numpy())
+
+    return np.concatenate(results, axis=0)
